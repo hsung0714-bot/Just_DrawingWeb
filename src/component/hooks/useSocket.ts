@@ -24,7 +24,8 @@ export function useSocket({ roomId, canvasRef, saveToHistory }: UseSocketOptions
   useEffect(() => {
     if (!roomId) return;
 
-    const socket: TypedSocket = io("/", {
+    const serverUrl = import.meta.env.VITE_SOCKET_URL || "/";
+    const socket: TypedSocket = io(serverUrl, {
       transports: ["websocket", "polling"],
     });
     socketRef.current = socket;
