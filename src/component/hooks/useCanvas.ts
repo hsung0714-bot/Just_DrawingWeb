@@ -1,5 +1,12 @@
 import { useEffect, useRef } from "react";
 import type { Tool } from "../types";
+import type { StrokeData } from "../socket-types";
+
+interface SocketCallbacks {
+  onStrokeStart?: (data: StrokeData) => void;
+  onStrokeMove?: (data: StrokeData) => void;
+  onStrokeEnd?: () => void;
+}
 
 export function useCanvas(
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
@@ -7,6 +14,7 @@ export function useCanvas(
   brushSize: number,
   tool: Tool,
   saveToHistory: () => void,
+  socketCallbacks?: SocketCallbacks,
 ) {
   const isDrawing = useRef(false);
 
@@ -46,6 +54,7 @@ export function useCanvas(
       const { x, y } = getPos(e);
       ctx.beginPath();
       ctx.moveTo(x, y);
+      socketCallbacks?.onStrokeStart?.({ x, y, color, brushSize, tool });
     };
 
     const draw = (e: MouseEvent) => {
@@ -57,12 +66,14 @@ export function useCanvas(
       ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color;
       ctx.lineTo(x, y);
       ctx.stroke();
+      socketCallbacks?.onStrokeMove?.({ x, y, color, brushSize, tool });
     };
 
     const stopDrawing = () => {
       if (isDrawing.current) {
         isDrawing.current = false;
         saveToHistory();
+        socketCallbacks?.onStrokeEnd?.();
       }
     };
 
@@ -77,5 +88,5 @@ export function useCanvas(
       canvas.removeEventListener("mouseup", stopDrawing);
       canvas.removeEventListener("mouseleave", stopDrawing);
     };
-  }, [canvasRef, color, brushSize, tool, saveToHistory]);
+  }, [canvasRef, color, brushSize, tool, saveToHistory, socketCallbacks]);
 }

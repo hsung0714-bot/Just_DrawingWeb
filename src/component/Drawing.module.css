@@ -238,3 +238,148 @@
   max-width: 100%;
   max-height: 100%;
 }
+
+/* Connection Badge */
+.connectionBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #f0f2f5;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusOnline {
+  background: #2ecc71;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.5);
+}
+
+.statusOffline {
+  background: #e74c3c;
+}
+
+.badgeText {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Room Join Overlay */
+.roomOverlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.roomCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.roomTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.roomDesc {
+  font-size: 14px;
+  color: #888;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.roomForm {
+  display: flex;
+  gap: 8px;
+}
+
+.roomInput {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.roomInput:focus {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.roomBtn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: #4361ee;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.roomBtn:hover:not(:disabled) {
+  background: #3a56d4;
+}
+
+.roomBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.roomDivider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.roomDivider::before,
+.roomDivider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.roomQuickBtn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fafafa;
+  color: #555;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.roomQuickBtn:hover {
+  background: #eef0f5;
+  border-color: #c0c0c0;
+}
