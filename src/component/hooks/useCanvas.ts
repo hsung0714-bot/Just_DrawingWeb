@@ -35,13 +35,16 @@ export function useCanvas(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Mouse drawing events
+  // Pointer drawing events (supports mouse, touch, and stylus)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
 
-    const getPos = (e: MouseEvent) => {
+    // Prevent default touch behavior (scrolling, zooming) on canvas
+    canvas.style.touchAction = "none";
+
+    const getPos = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
@@ -51,15 +54,16 @@ export function useCanvas(
       };
     };
 
-    const startDrawing = (e: MouseEvent) => {
+    const startDrawing = (e: PointerEvent) => {
       isDrawing.current = true;
+      canvas.setPointerCapture(e.pointerId);
       const { x, y } = getPos(e);
       ctx.beginPath();
       ctx.moveTo(x, y);
       socketCallbacks?.onStrokeStart?.({ x, y, color, brushSize, tool });
     };
 
-    const draw = (e: MouseEvent) => {
+    const draw = (e: PointerEvent) => {
       if (!isDrawing.current) return;
       const { x, y } = getPos(e);
       ctx.lineWidth = brushSize;
@@ -79,16 +83,16 @@ export function useCanvas(
       }
     };
 
-    canvas.addEventListener("mousedown", startDrawing);
-    canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("mouseleave", stopDrawing);
+    canvas.addEventListener("pointerdown", startDrawing);
+    canvas.addEventListener("pointermove", draw);
+    canvas.addEventListener("pointerup", stopDrawing);
+    canvas.addEventListener("pointerleave", stopDrawing);
 
     return () => {
-      canvas.removeEventListener("mousedown", startDrawing);
-      canvas.removeEventListener("mousemove", draw);
-      canvas.removeEventListener("mouseup", stopDrawing);
-      canvas.removeEventListener("mouseleave", stopDrawing);
+      canvas.removeEventListener("pointerdown", startDrawing);
+      canvas.removeEventListener("pointermove", draw);
+      canvas.removeEventListener("pointerup", stopDrawing);
+      canvas.removeEventListener("pointerleave", stopDrawing);
     };
   }, [canvasRef, color, brushSize, tool, saveToHistory, socketCallbacks]);
 }
