@@ -20,7 +20,8 @@ export function useCanvas(
 
   // Canvas initialization
   useEffect(() => {
-    const canvas = canvasRef.current!;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
 
     canvas.width = 900;
@@ -36,7 +37,8 @@ export function useCanvas(
 
   // Mouse drawing events
   useEffect(() => {
-    const canvas = canvasRef.current!;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
 
     const getPos = (e: MouseEvent) => {

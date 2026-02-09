@@ -9,12 +9,11 @@ import Header from "./ui/Header";
 import Toolbar from "./ui/Toolbar";
 import RoomJoin from "./ui/RoomJoin";
 
-const Drawing = () => {
+const DrawingCanvas = ({ roomId }: { roomId: string }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [color, setColor] = useState("#000000");
   const [brushSize, setBrushSize] = useState(3);
   const [tool, setTool] = useState<Tool>("pen");
-  const [roomId, setRoomId] = useState<string | null>(null);
 
   const { saveToHistory, undo, redo, historyIndex, historyLength } =
     useHistory(canvasRef);
@@ -48,14 +47,6 @@ const Drawing = () => {
     link.click();
   }, []);
 
-  if (!roomId) {
-    return (
-      <div className={styles.container}>
-        <RoomJoin onJoin={setRoomId} />
-      </div>
-    );
-  }
-
   return (
     <div className={styles.container}>
       <Header
@@ -88,6 +79,20 @@ const Drawing = () => {
       </div>
     </div>
   );
+};
+
+const Drawing = () => {
+  const [roomId, setRoomId] = useState<string | null>(null);
+
+  if (!roomId) {
+    return (
+      <div className={styles.container}>
+        <RoomJoin onJoin={setRoomId} />
+      </div>
+    );
+  }
+
+  return <DrawingCanvas roomId={roomId} />;
 };
 
 export default Drawing;
